@@ -8,6 +8,8 @@ This project builds a Convolutional Neural Network (CNN) to predict **age** and 
 
 - **Source**: [KaggleHub - SPR X-ray Age and Gender Dataset](https://www.kaggle.com/datasets/felipekitamura/spr-x-ray-age-and-gender-dataset)
 - **Structure**:
+
+
 /dataset/
 ├── train/
 ├── train_age.csv
@@ -61,17 +63,17 @@ model_gender.fit(
   epochs=5
 )
 
-🚫 Age Prediction
+### 🚫 Age Prediction
 Defined but training not executed yet. Update label to Age and change output activation & loss.
 
-💾 Model Saving
+### 💾 Model Saving
 model_gender.save('model_gender.h5')
 
-📊 Evaluation
+### 📊 Evaluation
 Evaluation metrics can be added using:
 model.evaluate(X_test, y_test)
 
-🚀 To-Do / Future Work
+### 🚀 To-Do / Future Work
 ✅ Train gender prediction model
 
 ⏳ Finish and train age regression model
