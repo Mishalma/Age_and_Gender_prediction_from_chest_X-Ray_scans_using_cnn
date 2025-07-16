@@ -1,92 +1,86 @@
-Age and Gender Prediction from Chest X-ray Scans using CNN
-This project leverages Convolutional Neural Networks (CNNs) to predict gender (classification) and age (regression) from chest X-ray images. The model uses grayscale images, preprocessed and normalized, and is trained on a dataset containing age and gender labels for X-ray scans.
+# 🩻 Age and Gender Prediction from Chest X-ray Scans using CNN
 
-📂 Dataset
-Source: KaggleHub - Felipe Kitamura's SPR X-ray dataset
+This project builds a Convolutional Neural Network (CNN) to predict **age** and **gender** from chest X-ray scans. The data is preprocessed using grayscale conversion, inversion, resizing, and normalization. A custom CNN model is trained separately for binary gender classification and age regression.
 
-Structure:
+---
 
-train_age.csv: Contains filenames and corresponding ages.
+## 📁 Dataset
 
-train_gender.csv: Contains filenames and gender labels.
+- **Source**: [KaggleHub - SPR X-ray Age and Gender Dataset](https://www.kaggle.com/datasets/felipekitamura/spr-x-ray-age-and-gender-dataset)
+- **Structure**:
+/dataset/
+├── train/
+├── train_age.csv
+└── train_gender.csv
 
-train/: Directory containing X-ray image files.
+- **Labels**:
+- `train_age.csv` → age (in years)
+- `train_gender.csv` → gender (0: female, 1: male)
 
-🔧 Preprocessing Steps
-Grayscale Conversion
+---
 
-Image Inversion: Convert image to its negative (255 - pixel).
+## ⚙️ Preprocessing Pipeline
 
-Resizing: Images resized to 128x128.
+1. Convert to grayscale using OpenCV
+2. Invert image (negative): `255 - pixel`
+3. Resize to `128x128`
+4. Normalize pixel values to `[0, 1]`
+5. Merge image, age, and gender into a unified DataFrame
 
-Normalization: Pixel values scaled to the range [0, 1].
+---
 
-Data Structuring: Images, age, and gender compiled into a DataFrame.
+## 🧠 Model Architecture
 
-🧠 Model Architecture
-The same custom CNN architecture is used for both tasks with modifications in the final layer.
+A custom CNN built using TensorFlow/Keras:
 
-🔹 Gender Prediction (Binary Classification)
-Input: (128, 128, 1)
+### 🔹 Gender Prediction (Binary Classification)
 
-Convolutional Blocks: Several Conv2D + MaxPool + BatchNorm + ReLU layers
+- **Input**: `128x128x1` (grayscale image)
+- **Blocks**: Repeated Conv2D → MaxPool → BatchNorm → ReLU
+- **Output Layer**: `Dense(1, activation='sigmoid')`
+- **Loss**: `binary_crossentropy`
+- **Optimizer**: `Adam`
 
-Output: Sigmoid layer
+### 🔹 Age Prediction (Regression)
 
-Loss: Binary Crossentropy
+- Same architecture as above
+- Final Layer: `Dense(1)` (linear activation)
+- **Loss**: To be implemented with `mean_squared_error` or `mean_absolute_error`
 
-Optimizer: Adam
+---
 
-🔹 Age Prediction (Regression)
-Output layer modified to Dense(1) with linear activation.
+## 🏋️‍♂️ Training the Model
 
-Loss: Likely Mean Squared Error (though not explicitly shown)
+### ✅ Gender Classification
 
-Note: Only gender training code was executed; age training appears initialized but incomplete in the notebook.
-
-▶️ Training
-python
-Copy code
+```python
 model_gender.fit(
-    X, y, 
-    steps_per_epoch=1000, 
-    validation_split=0.2, 
-    epochs=5
+  X, y,
+  steps_per_epoch=1000,
+  validation_split=0.2,
+  epochs=5
 )
-Training history is plotted using pandas + matplotlib.
+
+🚫 Age Prediction
+Defined but training not executed yet. Update label to Age and change output activation & loss.
 
 💾 Model Saving
-Trained gender model is saved as:
+model_gender.save('model_gender.h5')
 
-bash
-Copy code
-model_gender.h5
-📊 Evaluation (To be Added)
-Model evaluation (e.g., accuracy for gender, MAE for age) is not included but can be added using:
-
-python
-Copy code
+📊 Evaluation
+Evaluation metrics can be added using:
 model.evaluate(X_test, y_test)
-📝 How to Run
-Clone the repo.
 
-Install dependencies:
+🚀 To-Do / Future Work
+✅ Train gender prediction model
 
-bash
-Copy code
-pip install numpy pandas opencv-python pillow matplotlib tensorflow tqdm
-Place the dataset in the specified folder.
+⏳ Finish and train age regression model
 
-Run the notebook or convert it to script for terminal usage.
+📈 Add visualizations (Grad-CAM, heatmaps)
 
-🚀 Future Improvements
-Train and evaluate the age prediction model.
+♻️ Use transfer learning (e.g., ResNet, Inception)
 
-Add Grad-CAM visualization for interpretability.
+🧪 Add robust evaluation + test-time augmentation
 
-Use transfer learning with pre-trained CNNs like ResNet or DenseNet.
-
-Apply data augmentation for robustness.
-
-📜 License
-This project is under the MIT License.
+📄 License
+This project is licensed under the MIT License. See LICENSE for details.
