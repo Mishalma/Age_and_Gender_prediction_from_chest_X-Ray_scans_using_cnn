@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Age and Gender Detection</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #6b7280, #1e3a8a);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Inter", sans-serif;
+      }
+      .container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 2rem;
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+      }
+      .upload-btn {
+        transition: all 0.3s ease;
+      }
+      .upload-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+      .result-text {
+        opacity: 0;
+        transform: translateY(20px);
+        background: #e0e7ff;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-top: 1.5rem;
+      }
+      .image-container {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      .no-result {
+        color: #6b7280;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-3xl font-bold text-gray-800 mb-6 animate-pulse">
+        Age and Gender Detection
+      </h1>
+      <form method="post" enctype="multipart/form-data" class="space-y-4">
+        <div class="flex flex-col items-center">
+          <label for="file1" class="text-lg text-gray-600 mb-2"
+            >Upload an Image</label
+          >
+          <input
+            type="file"
+            id="file1"
+            name="file1"
+            accept="image/*"
+            class="border border-gray-300 rounded-lg p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </div>
+        <button
+          type="submit"
+          class="upload-btn bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-700"
+        >
+          Analyze Image
+        </button>
+      </form>
+      <div class="image-container mt-6">
+        <img
+          src="static/input.png"
+          alt="Uploaded Image"
+          class="rounded-lg mx-auto"
+          style="max-width: 500px; width: 100%"
+        />
+      </div>
+      <div class="result-text">
+        {% if result %}
+        <h1 class="text-2xl font-semibold text-gray-800">{{ result }}</h1>
+        {% else %}
+        <p class="no-result">
+          No analysis result yet. Upload an image to see the results!
+        </p>
+        {% endif %}
+      </div>
+    </div>
+
+    <script>
+      // GSAP animations
+      gsap.from(".container", {
+        duration: 1,
+        y: -50,
+        opacity: 0,
+        ease: "power3.out",
+      });
+      gsap.from("h1", {
+        duration: 1,
+        delay: 0.3,
+        opacity: 0,
+        scale: 0.8,
+        ease: "back.out(1.7)",
+      });
+      gsap.from("form", {
+        duration: 1,
+        delay: 0.5,
+        opacity: 0,
+        x: -30,
+        ease: "power2.out",
+      });
+      gsap.to(".image-container", {
+        duration: 1,
+        opacity: 1,
+        scale: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".image-container",
+          start: "top 80%",
+        },
+      });
+      gsap.to(".result-text", {
+        duration: 1,
+        opacity: 1,
+        y: 0,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".result-text",
+          start: "top 80%",
+        },
+      });
+    </script>
+  </body>
+</html>
