@@ -1,88 +1,117 @@
-# 🩻 Age and Gender Prediction from Chest X-ray Scans using CNN
+# Age and Gender Prediction from Chest X-Ray Scans
 
-This project builds a Convolutional Neural Network (CNN) to predict **age** and **gender** from chest X-ray scans. The data is preprocessed using grayscale conversion, inversion, resizing, and normalization. A custom CNN model is trained separately for binary gender classification and age regression.
+A machine learning web application that predicts age and gender from chest X-ray images using Convolutional Neural Networks (CNN). The application provides a user-friendly web interface for uploading X-ray images and receiving instant predictions.
 
----
+## Features
 
-## 📁 Dataset
+- **Age Prediction**: Estimates the age of patients from chest X-ray scans
+- **Gender Classification**: Determines whether the patient is male or female
+- **Web Interface**: Clean, responsive web UI with drag-and-drop file upload
+- **Real-time Processing**: Instant predictions after image upload
+- **Image Preprocessing**: Automatic image normalization and resizing
 
-- **Source**: [KaggleHub - SPR X-ray Age and Gender Dataset](https://www.kaggle.com/datasets/felipekitamura/spr-x-ray-age-and-gender-dataset)
-- **Structure**:
+## Technology Stack
 
+- **Backend**: Flask (Python web framework)
+- **Machine Learning**: TensorFlow/Keras
+- **Image Processing**: OpenCV, PIL
+- **Frontend**: HTML5, CSS3, JavaScript with GSAP animations
+- **Styling**: Tailwind CSS
 
-/dataset/
-├── train/
-├── train_age.csv
-└── train_gender.csv
+## Project Structure
 
-- **Labels**:
-- `train_age.csv` → age (in years)
-- `train_gender.csv` → gender (0: female, 1: male)
+```
+├── app.py                 # Flask web application
+├── model.py              # ML model loading and prediction functions
+├── model_age.h5          # Pre-trained age prediction model
+├── model_gender.h5       # Pre-trained gender classification model
+├── requirements.txt      # Python dependencies
+├── static/
+│   └── input.png        # Uploaded images storage
+├── templates/
+│   └── index.html       # Web interface template
+└── Age_and_Gender_prediction_from_chest_X-Ray_scans_using_cnn.ipynb
+```
 
----
+## Installation
 
-## ⚙️ Preprocessing Pipeline
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd lungsbased_age_gender_prediction
+   ```
 
-1. Convert to grayscale using OpenCV
-2. Invert image (negative): `255 - pixel`
-3. Resize to `128x128`
-4. Normalize pixel values to `[0, 1]`
-5. Merge image, age, and gender into a unified DataFrame
+2. **Create a virtual environment**
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate  # On Windows
+   # source venv/bin/activate  # On macOS/Linux
+   ```
 
----
+3. **Install dependencies**
+   ```bash
+   pip install flask tensorflow opencv-python pillow numpy matplotlib
+   ```
 
-## 🧠 Model Architecture
+## Usage
 
-A custom CNN built using TensorFlow/Keras:
+1. **Start the application**
+   ```bash
+   python app.py
+   ```
 
-### 🔹 Gender Prediction (Binary Classification)
+2. **Access the web interface**
+   - Open your browser and navigate to `http://localhost:5000`
 
-- **Input**: `128x128x1` (grayscale image)
-- **Blocks**: Repeated Conv2D → MaxPool → BatchNorm → ReLU
-- **Output Layer**: `Dense(1, activation='sigmoid')`
-- **Loss**: `binary_crossentropy`
-- **Optimizer**: `Adam`
+3. **Upload and analyze**
+   - Click "Choose File" to select a chest X-ray image (PNG format)
+   - Click "Analyze Image" to get predictions
+   - View the predicted age and gender results
 
-### 🔹 Age Prediction (Regression)
+## Model Information
 
-- Same architecture as above
-- Final Layer: `Dense(1)` (linear activation)
-- **Loss**: To be implemented with `mean_squared_error` or `mean_absolute_error`
+The application uses two separate CNN models:
 
----
+- **Age Model** (`model_age.h5`): Regression model for age prediction
+- **Gender Model** (`model_gender.h5`): Binary classification model for gender prediction
 
-## 🏋️‍♂️ Training the Model
+### Input Requirements
+- **Image Format**: PNG files
+- **Processing**: Images are automatically converted to grayscale, inverted (negative), and resized to 128x128 pixels
+- **Normalization**: Pixel values are normalized to the range [0, 1]
 
-### ✅ Gender Classification
+## API Endpoints
+
+- `GET /` - Renders the main interface
+- `POST /` - Handles file upload and returns predictions
+
+## Configuration
+
+Update the following paths in the code to match your environment:
 
 ```python
-model_gender.fit(
-  X, y,
-  steps_per_epoch=1000,
-  validation_split=0.2,
-  epochs=5
-)
+# In app.py
+UPLOAD_FOLDER = 'path/to/your/project/static'
 
-### 🚫 Age Prediction
-Defined but training not executed yet. Update label to Age and change output activation & loss.
+# In model.py  
+base = 'path/to/your/project'
+```
 
-### 💾 Model Saving
-model_gender.save('model_gender.h5')
+## Development
 
-### 📊 Evaluation
-Evaluation metrics can be added using:
-model.evaluate(X_test, y_test)
+The project includes a Jupyter notebook (`Age_and_Gender_prediction_from_chest_X-Ray_scans_using_cnn.ipynb`) containing the model training and development process.
 
-### 🚀 To-Do / Future Work
-✅ Train gender prediction model
+## Contributing
 
-⏳ Finish and train age regression model
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
-📈 Add visualizations (Grad-CAM, heatmaps)
+## License
 
-♻️ Use transfer learning (e.g., ResNet, Inception)
+This project is open source and available under the [MIT License](LICENSE).
 
-🧪 Add robust evaluation + test-time augmentation
+## Disclaimer
 
-📄 License
-This project is licensed under the MIT License. See LICENSE for details.
+This application is for educational and research purposes only. It should not be used for actual medical diagnosis or treatment decisions. Always consult qualified healthcare professionals for medical advice.
